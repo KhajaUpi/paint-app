@@ -1,0 +1,53 @@
+:root { --accent: #6366f1; --glass: rgba(20, 20, 22, 0.85); --radius: 24px; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #000; overflow: hidden; font-family: -apple-system, system-ui, sans-serif; color: white; }
+
+#canvas-container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; z-index: 1; }
+canvas { background: white; cursor: none; box-shadow: 0 40px 120px rgba(0,0,0,0.8); transition: transform 0.1s linear; will-change: transform; }
+
+#brush-preview { position: fixed; border: 1px solid #fff; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transform: translate(-50%, -50%); display: none; }
+
+/* Start Menu - Refined & Bug-Free */
+.overlay { position: fixed; inset: 0; background: #000; z-index: 5000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(20px); transition: opacity 0.5s ease; }
+.modal { background: #111; padding: 40px; border-radius: 32px; width: 90%; max-width: 400px; border: 1px solid #222; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+.logo-text { font-size: 24px; margin-bottom: 30px; font-weight: 800; background: linear-gradient(45deg, #fff, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.input-group { margin-bottom: 20px; text-align: left; }
+.input-group label { font-size: 11px; color: #555; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; display: block; }
+.input-group input[type="text"] { width: 100%; background: #000; border: 1px solid #333; padding: 16px; border-radius: 14px; color: white; font-size: 16px; }
+.color-picker-box { background: #000; padding: 12px; border-radius: 14px; border: 1px solid #333; display: flex; align-items: center; gap: 12px; }
+.primary-btn { width: 100%; padding: 20px; background: var(--accent); border: none; border-radius: 18px; color: white; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+
+/* The Dock - Fixed Pointer Events */
+.dock-container { position: fixed; bottom: 30px; left: 0; right: 0; display: flex; justify-content: center; z-index: 2000; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.glass-dock { display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--glass); backdrop-filter: blur(40px); border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; }
+
+.dock-item { width: 52px; height: 52px; border: none; background: transparent; cursor: pointer; transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border-radius: 14px; display: flex; align-items: center; justify-content: center; position: relative; }
+.dock-item img { width: 34px; height: 34px; pointer-events: none; }
+.dock-item:hover { transform: scale(1.5) translateY(-12px); background: rgba(255,255,255,0.1); }
+.dock-item.active { background: rgba(99, 102, 241, 0.25); border: 1px solid rgba(99, 102, 241, 0.3); }
+
+.sep { width: 1px; height: 30px; background: rgba(255,255,255,0.1); margin: 0 5px; }
+.dock-config { display: flex; align-items: center; gap: 12px; padding-left: 10px; }
+#colorPicker { width: 32px; height: 32px; border: none; background: none; cursor: pointer; border-radius: 8px; }
+
+/* Magic Sparkle Trigger */
+.magic-trigger { 
+    position: fixed; bottom: 30px; right: 30px; width: 64px; height: 64px; 
+    background: var(--accent); border-radius: 50%; display: flex; align-items: center; 
+    justify-content: center; cursor: pointer; z-index: 2100; font-size: 26px;
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Brush Menu */
+.brush-menu { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 280px; background: #16161a; border-radius: 20px; padding: 10px; border: 1px solid #222; z-index: 2500; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+.brush-opt { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 12px; cursor: pointer; }
+.brush-opt:hover { background: #222; }
+.brush-opt.active { background: #2d2d35; }
+.sig { width: 60px; height: 8px; background: #eee; border-radius: 10px; }
+.s-calli { height: 3px; transform: rotate(-25deg); }
+.s-air { opacity: 0.2; filter: blur(4px); background: white; }
+.s-crayon { background: repeating-linear-gradient(90deg, #fff, #fff 2px, transparent 2px, transparent 4px); }
+
+.hidden { display: none !important; opacity: 0; pointer-events: none; }
