@@ -2,96 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AetherCanvas Pro | Studio</title>
     
-    <title>AetherCanvas | Studio Paint Pro - Free Online Drawing App</title>
-    <meta name="description" content="AetherCanvas (Studio Paint Pro) is a premium, free web-based drawing tool. Create digital art, sketches, and paintings with professional brushes in your browser.">
-    <meta name="keywords" content="AetherCanvas, Studio Paint Pro, online drawing tool, web paint app, digital sketchpad, KhajaUpi">
-    <meta name="author" content="KhajaUpi">
-
-    <meta property="og:title" content="AetherCanvas - Professional Web Sketching">
-    <meta property="og:description" content="Unleash your creativity with AetherCanvas. No download required.">
-    <meta property="og:url" content="https://khajaupi.github.io/paint-app/">
-    <meta property="og:type" content="website">
-
+    <link rel="icon" type="image/png" href="Favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
+    <div class="edge-glow top"></div>
+    <div class="edge-glow bottom"></div>
+    <div class="edge-glow left"></div>
+    <div class="edge-glow right"></div>
+
     <div id="startScreen" class="overlay">
-        <div class="modal fluent-appear">
-            <h1 class="logo-text">AetherCanvas</h1>
-            <p style="color: #ccc; margin-top: -15px; margin-bottom: 20px;">Powered by Studio Paint Pro</p>
+        <div class="modal slide-in-top">
+            <div class="brand">
+                <i class="fa-solid fa-wand-magic-sparkles magic-pulse"></i>
+                <h1 class="gradient-text">AETHER CANVAS</h1>
+                <p class="subtitle">ELITE STUDIO ENGINE</p>
+            </div>
             
             <div class="setup-form">
-                <div class="input-group">
+                <div class="field">
                     <label>Project Name</label>
-                    <input type="text" id="projectName" placeholder="Untitled Artwork" spellcheck="false" autocomplete="off">
+                    <input type="text" id="fileNameInput" placeholder="My Masterpiece">
                 </div>
-                <div class="input-group">
-                    <label>Canvas Background</label>
-                    <div class="color-picker-box">
-                        <input type="color" id="bgPicker" value="#ffffff">
-                        <span>Background Color</span>
+                
+                <div class="row">
+                    <div class="field">
+                        <label>Base Color</label>
+                        <input type="color" id="startBgPicker" value="#00ffff">
+                    </div>
+                    <div class="field">
+                        <label>Import Image</label>
+                        <label class="file-upload">
+                            <i class="fa-solid fa-image"></i> Choose
+                            <input type="file" id="bgUpload" accept="image/*">
+                        </label>
                     </div>
                 </div>
             </div>
-            <button id="launchBtn" class="primary-btn">Start Creating</button>
+            
+            <button id="startBtn" class="launch-btn">Launch Studio</button>
         </div>
     </div>
 
-    <div id="brush-preview"></div>
-
-    <div id="canvas-container">
-        <canvas id="canvas"></canvas>
+    <div class="viewport">
+        <div class="canvas-container" id="canvasContainer">
+            <canvas id="bgCanvas"></canvas>
+            <canvas id="mainCanvas"></canvas>
+            <canvas id="tempCanvas"></canvas>
+            <div id="textOverlay"></div>
+        </div>
     </div>
 
-    <div id="brushMenu" class="brush-menu hidden">
-        <div class="brush-opt active" data-brush="brush"><span>Brush</span><div class="sig s-normal"></div></div>
-        <div class="brush-opt" data-brush="calligraphy"><span>Calligraphy</span><div class="sig s-calli"></div></div>
-        <div class="brush-opt" data-brush="airbrush"><span>Airbrush</span><div class="sig s-air"></div></div>
-        <div class="brush-opt" data-brush="oil"><span>Oil Brush</span><div class="sig s-oil"></div></div>
-        <div class="brush-opt" data-brush="crayon"><span>Crayon</span><div class="sig s-crayon"></div></div>
-        <div class="brush-opt" data-brush="pencil"><span>Natural Pencil</span><div class="sig s-pencil"></div></div>
-    </div>
+    <div id="expandTrigger" class="floating-trigger"><i class="fa-solid fa-plus"></i></div>
 
-    <div id="minimizedTrigger" class="magic-trigger hidden">✨</div>
-
-    <div class="dock-container" id="dockContainer">
-        <div class="glass-dock">
-            <div class="dock-config">
-                <input type="color" id="colorPicker" value="#6366f1">
-                <div class="slider-wrapper">
-                    <input type="range" id="lineWidth" min="1" max="100" value="15">
-                </div>
+    <div class="mac-dock-container">
+        <div class="mac-dock dock-entrance">
+            <div class="section">
+                <div class="color-wrap"><input type="color" id="colorPicker" value="#ffffff"></div>
+                <button id="brushBtn" class="dock-btn active" title="Brush"><i class="fa-solid fa-paintbrush"></i></button>
+                <button id="eraserBtn" class="dock-btn" title="Eraser"><i class="fa-solid fa-eraser"></i></button>
+                <button id="fillBtn" class="dock-btn" title="Paint Bucket"><i class="fa-solid fa-fill-drip"></i></button>
+                <button id="textBtn" class="dock-btn" title="Text Tool"><i class="fa-solid fa-font"></i></button>
             </div>
-            <div class="sep"></div>
             
-            <button class="dock-item active" id="penBtn" aria-label="Brushes">
-                <img src="https://img.icons8.com/fluency/96/paint-brush.png" alt="Brush">
-            </button>
-            <button class="dock-item" id="eraserBtn" aria-label="Eraser">
-                <img src="https://img.icons8.com/fluency/96/eraser.png" alt="Eraser">
-            </button>
-            <button class="dock-item" id="pickerBtn" aria-label="Color Picker">
-                <img src="https://img.icons8.com/fluency/96/color-dropper.png" alt="Color Picker">
-            </button>
+            <div class="divider"></div>
             
-            <div class="sep"></div>
+            <div class="section slider-section">
+                <div id="brushPreview"></div>
+                <input type="range" id="sizeSlider" min="1" max="100" value="15">
+            </div>
             
-            <button class="dock-item" id="undoBtn" aria-label="Undo">
-                <img src="https://img.icons8.com/fluency/96/undo.png" alt="Undo">
-            </button>
-            <button class="dock-item" id="saveBtn" aria-label="Save">
-                <img src="https://img.icons8.com/fluency/96/save-as.png" alt="Save">
-            </button>
+            <div class="divider"></div>
             
-            <div class="sep"></div>
-            
-            <button class="dock-item" id="minimizeBtn" aria-label="Minimize">
-                <img src="https://img.icons8.com/fluency/96/collapse-arrow.png" alt="Minimize">
-            </button>
+            <div class="section">
+                <button id="undoBtn" class="dock-btn" title="Undo (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+                <button id="saveBtn" class="dock-btn" title="Save Project"><i class="fa-solid fa-download"></i></button>
+                <button id="minimizeBtn" class="dock-btn" title="Minimize Bar"><i class="fa-solid fa-compress"></i></button>
+                <button id="exitBtn" class="dock-btn exit" title="Reload"><i class="fa-solid fa-power-off"></i></button>
+            </div>
         </div>
     </div>
 
