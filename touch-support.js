@@ -1,30 +1,43 @@
 // touch-support.js
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
 
-// Prevent scrolling when touching the canvas
-canvas.style.touchAction = 'none';
+function enableTouchDrawing() {
+    const canvas = document.querySelector("canvas");
+    if (!canvas) return; // Exit if canvas isn't on screen yet
 
-function handleTouch(e) {
-    e.preventDefault(); // Stops the page from shaking/moving
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    
-    // Calculate exact touch position relative to canvas
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+    // 1. Critical: Stop the phone from scrolling/zooming while drawing
+    canvas.style.touchAction = "none";
 
-    return { x, y };
+    const ctx = canvas.getContext("2d");
+
+    // 2. Use PointerEvents (Covers Mouse, Finger, and Apple Pencil)
+    canvas.addEventListener("pointerdown", (e) => {
+        // This triggers your existing startDrawing function
+        // Ensure your main script.js has a function named 'startDrawing'
+        isDrawing = true; 
+        ctx.beginPath();
+        const rect = canvas.getBoundingClientRect();
+        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        
+        // This draws the line
+        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        ctx.stroke();
+    });
+
+    canvas.addEventListener("pointerup", () => {
+        isDrawing = false;
+        ctx.closePath();
+    });
 }
 
-canvas.addEventListener('touchstart', (e) => {
-    const pos = handleTouch(e);
-    // Call your existing startDrawing function here
-    startDrawing(pos.x, pos.y); 
-});
-
-canvas.addEventListener('touchmove', (e) => {
-    const pos = handleTouch(e);
-    // Call your existing drawing function here
-    draw(pos.x, pos.y);
+// 3. Wait for the "Start Creating" button to be clicked
+// Replace '.start-btn' with whatever class your button actually has
+document.addEventListener("click", (e) => {
+    if (e.target.innerText === "Start Creating" || e.target.classList.contains("start-btn")) {
+        setTimeout(enableTouchDrawing, 500); // Give the app a moment to load the canvas
+    }
 });
